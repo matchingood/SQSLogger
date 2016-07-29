@@ -8,8 +8,7 @@
 
 ## Preparation
 
-1. 使用するプロジェクトのcomposer.jsonに以下を記述します。
-
+1\. 使用するプロジェクトのcomposer.jsonに以下を記述します。
 ```json
     "require-dev": {
         .
@@ -27,16 +26,15 @@
         }
     ]
 ```
-
-2. 端末上で以下を実行します。
+2\. 端末上で以下を実行します。
 
 ```sh
 $ composer config -g github-oauth.github.com 7b748f8f286a2b9fa2e723c484d25ad15f9970ae
 ```
 
-3. composer updateを実行します。
+3\. composer updateを実行します。
 
-4. .envに以下を記述します
+4\. .envに以下を記述します
 ```
 APP_ENV=## 本番環境ならprodに指定 ##
 AWS_ACCESS_KEY_ID=## AWSのアクセスキー ##
