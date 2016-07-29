@@ -1,0 +1,14 @@
+{
+    "name": "matchingood/sqs-logger",
+    "description": "send logging data to AWS SQS, working on Laravel.",
+    "type": "library",
+    "require": {
+        "aws/aws-sdk-php": "^3.18",
+        "laravel/framework": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Matchingood\\": "src/"
+        }
+    }
+}
