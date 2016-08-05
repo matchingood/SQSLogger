@@ -14,7 +14,7 @@
         .
         .
         .
-        "matchingood/sqs-logger": "~1.0"
+        "matchingood/sqs-logger": "dev-master"
     },
     .
     .
@@ -34,35 +34,56 @@ $ composer config -g github-oauth.github.com 7b748f8f286a2b9fa2e723c484d25ad15f9
 
 3\. composer updateを実行します。
 
-4\. .envに以下を記述します
+4\. config/app.phpに以下を追記します。
+
 ```
-APP_ENV=## 本番環境ならprodに指定 ##
-AWS_ACCESS_KEY_ID=## AWSのアクセスキー ##
-AWS_SECRET_ACCESS_KEY=## AWSのシークレットアクセスキー ##
-AWS_SQS_NAME=## 使用するSQS上のQueueの名前 ##
+    'providers' => [
+        .
+        .
+        .
+        Matchingood\SQSLogger\SQSLoggerServiceProvider::class
+    ],
+    .
+    .
+    .
+    'aliases' => [
+        .
+        .
+        .
+        'SQSLogger' => Matchingood\SQSLogger\Facades\SQSLogger::class
+    ],
+```
+
+5\. php artisan vendor:publishを実行します
+
+* これによって、config/以下にsqslogger.phpが生成されます。
+* それぞれの項目は以下に対応しています。
+```
+return [
+
+    'env' => ## prodであればSQSに送信。そうでなければローカルで出力 ##,
+
+    'aws' => [
+        'access_key' => ## AWSのアクセスキー ##,
+        'access_secret' => ## AWSのシークレットアクセスキー ##,
+        'sqs_name' => ## 使用するSQS上のQueueの名前 ##
+    ]
+];
 ```
 
 ## Usage
 ```php
 <?php
 
-use Matchingood\SQSLogger
+use SQSLogger;
 
 class Test
 {
-    private $logger;
-
-    public function __construct()
-    {
-        $this->logger = new SQSLogger;
-    }
-
     public function test()
     {
-        $this->logger->info("info"); // 引数をINFOレベルのログとしてSQSへ送信
-        $this->logger->error("error"); // 引数をERRORレベルのログとして送信
-        $this->logger->access("access"); // 引数をACCESSレベルのログとして送信
+        SQSLogger::info("info"); // 引数をINFOレベルのログとしてSQSへ送信
+        SQSLogger::error("error"); // 引数をERRORレベルのログとして送信
+        SQSLogger::access("access"); // 引数をACCESSレベルのログとして送信
     }
 }
 ```
-

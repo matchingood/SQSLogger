@@ -1,6 +1,13 @@
 <?php
 
+/*
+ * configuration file for SQSLogger
+ * see: https://github.com/matchingood/SQSLogger
+ *
+ */
+
 return [
+
     'env' => env('APP_ENV', 'local'),
 
     'aws' => [

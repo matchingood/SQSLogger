@@ -14,17 +14,17 @@ class SQSLogger
 
     public function __construct()
     {
-        if (env('APP_ENV') === 'prod') {
+        if (config('sqslogger.env') === 'prod') {
             $this->sqs = new SqsClient([
                 'credentials' => [
-                    'key' => env('AWS_ACCESS_KEY_ID'),
-                    'secret' => env('AWS_SECRET_ACCESS_KEY')
+                    'key' => config('sqslogger.aws.access_key'),
+                    'secret' => config('sqslogger.aws.access_secret')
                 ],
                 'version' => 'latest',
                 'region' => 'us-east-1'
             ]);
             $obj = $this->sqs->getQueueUrl([
-                'QueueName' => env('AWS_SQS_NAME', 'Log')
+                'QueueName' => config('sqslogger.aws.sqs_name')
             ]);
             $this->url = $obj['QueueUrl'];
         } else {
