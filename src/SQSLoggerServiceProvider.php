@@ -6,12 +6,10 @@ use Illuminate\Support\ServiceProvider;
 
 class SQSLoggerServiceProvider extends ServiceProvider
 {
-    protected $defer = true;
-
     public function register()
     {
         $this->app->singleton('sqslogger', function() {
-            return new SQSLogger;
+            return new \Matchingood\SQSLogger\SQSLogger;
         });
     }
 
