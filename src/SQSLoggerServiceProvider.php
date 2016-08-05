@@ -18,7 +18,7 @@ class SQSLoggerServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '../config/sqslogger.php', 'sqslogger'
+            __DIR__ . '../config/sqslogger.php' => config_path('sqslogger.php')
         ]);
     }
 }
