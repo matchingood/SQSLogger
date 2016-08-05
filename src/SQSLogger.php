@@ -20,11 +20,11 @@ class SQSLogger
                     'key' => config('sqslogger.aws.access_key'),
                     'secret' => config('sqslogger.aws.access_secret')
                 ],
-                'version' => 'latest',
-                'region' => 'us-east-1'
+                'version' => config('sqslogger.aws.sqs.version'),
+                'region' => config('sqslogger.aws.sqs.region')
             ]);
             $obj = $this->sqs->getQueueUrl([
-                'QueueName' => config('sqslogger.aws.sqs_name')
+                'QueueName' => config('sqslogger.aws.sqs.queue_name')
             ]);
             $this->url = $obj['QueueUrl'];
         } else {

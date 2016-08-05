@@ -66,8 +66,13 @@ return [
     'aws' => [
         'access_key' => ## AWSのアクセスキー ##,
         'access_secret' => ## AWSのシークレットアクセスキー ##,
-        'sqs_name' => ## 使用するSQS上のQueueの名前 ##
+        'sqs' => [
+            'version' => ## 使用するAPIのバージョン ##,
+            'region' => ## SQSのリージョン ##,
+            'queue_name' => ## 使用するSQS上のQueueの名前 ##
+        ]
     ]
+
 ];
 ```
 
