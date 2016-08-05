@@ -1,23 +1,16 @@
 <?php
 
-namespace Matchingood;
+namespace Matchingood\SQSLogger;
 
 use Illuminate\Http\Request;
 use Auth;
 use Log;
 use Aws\Sqs\SqsClient;
 
-class SQSLogger extends Illuminate\Support\ServiceProvider
+class SQSLogger
 {
     private $sqs;
     private $url;
-
-    public function boot()
-    {
-        $this->publishes([
-            __DIR__ . '../config/sqslogger.php', 'sqslogger'
-        ]);
-    }
 
     public function __construct()
     {
