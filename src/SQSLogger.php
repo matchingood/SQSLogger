@@ -7,10 +7,17 @@ use Auth;
 use Log;
 use Aws\Sqs\SqsClient;
 
-class SQSLogger
+class SQSLogger extends Illuminate\Support\ServiceProvider
 {
     private $sqs;
     private $url;
+
+    public function boot()
+    {
+        $this->publishes([
+            __DIR__ . '../config/sqslogger.php', 'sqslogger'
+        ]);
+    }
 
     public function __construct()
     {
