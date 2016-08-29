@@ -29,7 +29,7 @@
 2\. 端末上で以下を実行します。
 
 ```sh
-$ composer config -g github-oauth.github.com 7b748f8f286a2b9fa2e723c484d25ad15f9970ae
+$ composer config -g github-oauth.github.com [GitHub Token]
 ```
 
 3\. composer updateを実行します。
