@@ -1,37 +1,30 @@
 <?php
 
-namespace Matchingood;
+namespace Matchingood\SQSLogger;
 
 use Illuminate\Http\Request;
 use Auth;
 use Log;
 use Aws\Sqs\SqsClient;
 
-class SQSLogger extends Illuminate\Support\ServiceProvider
+class SQSLogger
 {
     private $sqs;
     private $url;
 
-    public function boot()
-    {
-        $this->publishes([
-            __DIR__ . '../config/sqslogger.php', 'sqslogger'
-        ]);
-    }
-
     public function __construct()
     {
-        if (env('APP_ENV') === 'prod') {
+        if (config('sqslogger.env') === 'prod') {
             $this->sqs = new SqsClient([
                 'credentials' => [
-                    'key' => env('AWS_ACCESS_KEY_ID'),
-                    'secret' => env('AWS_SECRET_ACCESS_KEY')
+                    'key' => config('sqslogger.aws.access_key'),
+                    'secret' => config('sqslogger.aws.access_secret')
                 ],
-                'version' => 'latest',
-                'region' => 'us-east-1'
+                'version' => config('sqslogger.aws.sqs.version'),
+                'region' => config('sqslogger.aws.sqs.region')
             ]);
             $obj = $this->sqs->getQueueUrl([
-                'QueueName' => env('AWS_SQS_NAME', 'Log')
+                'QueueName' => config('sqslogger.aws.sqs.queue_name')
             ]);
             $this->url = $obj['QueueUrl'];
         } else {
