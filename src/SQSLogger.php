@@ -37,7 +37,7 @@ class SQSLogger
     {
         $info = ['method' => $request->method(), 'accessUrl' => $request->fullUrl()];
 
-        if (!is_null($extrainfo)) {
+        if (!is_null($extraInfo)) {
             $info += $extraInfo;
         }
 
