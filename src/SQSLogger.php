@@ -35,24 +35,13 @@ class SQSLogger
 
     public function access(Request $request, $extraInfo = null)
     {
-        $id = -1;
-        if (Auth::check()) {
-            $id = auth()->user()->id;
+        $info = ['method' => $request->method(), 'accessUrl' => $request->url()];
+
+        if (!is_null($extrainfo)) {
+            $info += $extraInfo;
         }
 
-        $body = [
-            'level' => 'ACCESS',
-            'time' => date('Y-m-d H:i:s'),
-            'userId' => $id,
-            'method' => $request->method(),
-            'accessUrl' => $request->url(),
-        ];
-
-        if (!is_null($extraInfo)) {
-            $body += $extraInfo;
-        }
-
-        $body = json_encode($body, JSON_UNESCAPED_SLASHES);
+        $body = $this->createBody('ACCESS', "", $info);
 
         $this->sendMessage([
             'MessageBody' => $body,
@@ -91,7 +80,7 @@ class SQSLogger
 
     private function createBody($level, $message, $extraInfo = null)
     {
-        $id = -1;
+        $id = null;
         if (Auth::check()) {
             $id = auth()->user()->id;
         }
