@@ -65,6 +65,14 @@ class SQSLogger
         ], 'INFO');
     }
 
+    public function critical($message, $extraInfo = null)
+    {
+        $this->sendMessage([
+            'MessageBody' => $this->createBody('CRITICAL', $message, $extraInfo),
+            'QueueUrl' => $this->url
+        ], 'CRITICAL');
+    }
+
     private function sendMessage($data, $level = 'debug', $extraInfo = null)
     {
         if (env('APP_ENV') === 'prod') {
