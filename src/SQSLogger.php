@@ -93,14 +93,10 @@ class SQSLogger
             $id = auth()->user()->id;
         }
 
-        $bt = debug_backtrace();
-
         $body = [
             'level' => $level,
             'time' => date('Y-m-d H:i:s'),
             'userId' => $id,
-            'file' => $bt[1]['file'],
-            'line' => $bt[1]['line'],
             'message' => $message
         ];
 
