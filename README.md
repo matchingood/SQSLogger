@@ -51,23 +51,38 @@ return [
 
 ## Usage
 ```php
-<?php
+SQSLogger::info("info");
+SQSLogger::error("error");
+SQSLogger::critical("critical");
 
-use SQSLogger;
-
-class Test
-{
-    public function test()
-    {
-        SQSLogger::info("info");
-        SQSLogger::error("error");
-        SQSLogger::access("access");
-        SQSLogger::critical("access");
-    }
-}
+// Illuminate\Http\Request
+SQSLogger::access($request);
 ```
 
 You can add more information like this.
 ```php
 SQSLogger::info('info', ['hello' => 'world']);
+```
+
+## SQS
+SQSLogger sends json data to SQS in the production environment.
+```json
+{
+    "level": "INFO",
+    "time": "2016-09-07 17:30:00",
+    "userId": 1,
+    "message": "Hello World!"
+}
+```
+The `userId` property will be -1 when `Auth::check()` returns false.
+
+Only `ACCESS` level sends diferent json data, using `Illuminate\Http\Request` as a parameter.
+```json
+{
+    "level": "INFO",
+    "time": "2016-09-07 17:30:00",
+    "userId": 1,
+    "method": "POST",
+    "accessUrl": "https://github.com/matchingood"
+}
 ```
