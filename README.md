@@ -3,22 +3,28 @@
 Loggin library for Laravel application with AWS SQS
 
 ## Install
+In your composer.json,
+```
+"matchingood/sqs-logger": "^0.1"
+```
+
+Then you register SQSLogger at `config/app.php`.
 ```php
-    'providers' => [
-        .
-        .
-        .
-        Matchingood\SQSLogger\SQSLoggerServiceProvider::class
-    ],
+'providers' => [
     .
     .
     .
-    'aliases' => [
-        .
-        .
-        .
-        'SQSLogger' => Matchingood\SQSLogger\Facades\SQSLogger::class
-    ],
+    Matchingood\SQSLogger\SQSLoggerServiceProvider::class
+],
+.
+.
+.
+'aliases' => [
+    .
+    .
+    .
+    'SQSLogger' => Matchingood\SQSLogger\Facades\SQSLogger::class
+],
 ```
 
 You can create the configuration file to execute
