@@ -33,20 +33,15 @@ class SQSLogger
         }
     }
 
-    public function access(Request $request)
+    public function access(Request $request, $extraInfo = null)
     {
-        $id = -1;
-        if (Auth::check()) {
-            $id = auth()->user()->id;
+        $info = ['method' => $request->method(), 'accessUrl' => $request->fullUrl()];
+
+        if (!is_null($extrainfo)) {
+            $info += $extraInfo;
         }
 
-        $body = json_encode([
-            'level' => 'ACCESS',
-            'time' => date('Y-m-d H:i:s'),
-            'userId' => $id,
-            'method' => $request->method(),
-            'accessUrl' => $request->url(),
-        ], JSON_UNESCAPED_SLASHES);
+        $body = $this->createBody('ACCESS', "", $info);
 
         $this->sendMessage([
             'MessageBody' => $body,
@@ -54,26 +49,34 @@ class SQSLogger
         ]);
     }
 
-    public function error($message)
+    public function error($message, $extraInfo = null)
     {
         $this->sendMessage([
-            'MessageBody' => $this->createBody('ERROR', $message),
+            'MessageBody' => $this->createBody('ERROR', $message, $extraInfo),
             'QueueUrl' => $this->url
         ], 'ERROR');
     }
 
-    public function info($message)
+    public function info($message, $extraInfo = null)
     {
         $this->sendMessage([
-            'MessageBody' => $this->createBody('INFO', $message),
+            'MessageBody' => $this->createBody('INFO', $message, $extraInfo),
             'QueueUrl' => $this->url
         ], 'INFO');
     }
 
-    private function sendMessage($data, $level = 'debug')
+    public function critical($message, $extraInfo = null)
+    {
+        $this->sendMessage([
+            'MessageBody' => $this->createBody('CRITICAL', $message, $extraInfo),
+            'QueueUrl' => $this->url
+        ], 'CRITICAL');
+    }
+
+    private function sendMessage($data, $level = 'debug', $extraInfo = null)
     {
         if (env('APP_ENV') === 'prod') {
-            $this->sqs->sendMessage($data);
+            $this->sqs->sendMessage($data, $extraInfo);
         } elseif ($level === 'ERROR') {
             Log::error($data['MessageBody']);
         } elseif ($level === 'INFO') {
@@ -83,22 +86,28 @@ class SQSLogger
         }
     }
 
-    private function createBody($level, $message)
+    private function createBody($level, $message, $extraInfo = null)
     {
-        $id = -1;
+        $id = null;
         if (Auth::check()) {
             $id = auth()->user()->id;
         }
 
         $bt = debug_backtrace();
 
-        return json_encode([
+        $body = [
             'level' => $level,
             'time' => date('Y-m-d H:i:s'),
             'userId' => $id,
             'file' => $bt[1]['file'],
             'line' => $bt[1]['line'],
             'message' => $message
-        ], JSON_UNESCAPED_SLASHES);
+        ];
+
+        if (!is_null($extraInfo)) {
+            $body += $extraInfo;
+        }
+
+        return json_encode($body, JSON_UNESCAPED_SLASHES);
     }
 }
