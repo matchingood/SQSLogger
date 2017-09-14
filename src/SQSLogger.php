@@ -75,7 +75,7 @@ class SQSLogger
 
     private function sendMessage($data, $level = 'debug', $extraInfo = null)
     {
-        if (env('APP_ENV') === 'prod') {
+        if (config('sqslogger.env') === 'prod') {
             $this->sqs->sendMessage($data, $extraInfo);
         } elseif ($level === 'ERROR') {
             Log::error($data['MessageBody']);
